@@ -1,5 +1,6 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import {
+  ApiBadRequestResponse,
   ApiCreatedResponse,
   ApiTags,
   ApiUnauthorizedResponse,
@@ -18,6 +19,7 @@ export class ProductController {
 
   @ApiCreatedResponse({ description: 'product created succeessfully' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
+  @ApiBadRequestResponse({ description: 'Bad Request' })
   @UseGuards(AuthGuard, SellerGuard)
   @Post('/create')
   createProduct(@Body() dto: CreateProductDto, @InsertUser() user: User) {

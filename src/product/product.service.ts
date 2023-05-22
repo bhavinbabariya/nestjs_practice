@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/users/users.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { Product } from './product.entity';
 
 @Injectable()
@@ -27,6 +27,8 @@ export class ProductService {
   }
 
   async findByIds(Ids: number[]) {
-    return this.productRepo.findByIds(Ids);
+    return this.productRepo.findBy({
+      id: In(Ids),
+    });
   }
 }

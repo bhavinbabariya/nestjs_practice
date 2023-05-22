@@ -13,6 +13,8 @@ export class AppExceptionFilter implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const res = ctx.getResponse();
+
+    console.log('inside common');
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let msg = 'Internal Server Error';
 
@@ -41,7 +43,14 @@ export class AppExceptionFilter implements ExceptionFilter {
   }
 
   private async writeHttpLog(data: Record<string, any>) {
-    const LOGS_DIR = join(__dirname, '..', 'log', `${Date.now()}-log.json`); // dist/exceptions
+    const LOGS_DIR = join(
+      __dirname,
+      '..',
+      '..',
+      'log',
+      'http',
+      `${Date.now()}-log.json`,
+    );
 
     try {
       await writeFile(LOGS_DIR, JSON.stringify(data));

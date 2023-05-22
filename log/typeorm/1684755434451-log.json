@@ -1,0 +1,11 @@
+{
+  "response": {
+    "statusCode": 401,
+    "message": "invalid",
+    "error": "Unauthorized"
+  },
+  "status": 401,
+  "options": {},
+  "message": "invalid",
+  "name": "UnauthorizedException"
+}

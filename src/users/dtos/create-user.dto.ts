@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserDoesNotExistWithEmail } from '../validators/user-does-not-exist.validator';
+// import { UserDoesNotExistWithEmail } from '../validators/user-does-not-exist.validator';
 
 export class CreateUserDto {
   @ApiProperty({
@@ -10,7 +10,7 @@ export class CreateUserDto {
   })
   @IsNotEmpty()
   @IsEmail()
-  @UserDoesNotExistWithEmail({ message: 'User already exists' })
+  // @UserDoesNotExistWithEmail({ message: 'User already exists' })
   readonly email: string;
 
   @ApiProperty({
