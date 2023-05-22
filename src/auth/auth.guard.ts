@@ -12,9 +12,7 @@ export class AuthGuard implements CanActivate {
   constructor(
     private configService: ConfigService,
     private jwtService: JwtService,
-  ) {
-    // console.log('inside AuthGuard : ', jwtService, configService);
-  }
+  ) {}
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
     const req = ctx.switchToHttp().getRequest();
@@ -29,9 +27,9 @@ export class AuthGuard implements CanActivate {
         secret: this.configService.get('JWT.SECRET'),
       });
 
-      req['user'] = payload;
+      req['user'] = payload.user;
     } catch {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('token not verified');
     }
 
     return true;

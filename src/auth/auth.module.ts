@@ -17,11 +17,6 @@ import { AuthService } from './auth.service';
       }),
       inject: [ConfigService],
     }),
-    // JwtModule.register({
-    //   global: true,
-    //   secret: 'authsecret',
-    //   signOptions: { expiresIn: '60s' },
-    // }),
     UsersModule,
   ],
   controllers: [AuthController],

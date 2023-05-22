@@ -29,7 +29,7 @@ export class AuthService {
     };
   }
 
-  async signUp(email: string, password: string) {
+  async signUp(email: string, password: string, role: string) {
     const _user = await this.userService.findOneByEmail(email);
 
     if (_user) {
@@ -42,7 +42,7 @@ export class AuthService {
     const saltOrRounds = 10;
     const newPass = await bcrypt.hash(password, saltOrRounds);
 
-    const user = await this.userService.create(email, newPass);
+    const user = await this.userService.create(email, newPass, role);
     delete user.password;
 
     return user;
