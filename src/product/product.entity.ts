@@ -1,3 +1,5 @@
+import { Order } from 'src/order/order.entity';
+import { OrderDetails } from 'src/order/order_details.entity';
 import { User } from 'src/users/users.entity';
 import {
   Entity,
@@ -5,6 +7,7 @@ import {
   PrimaryGeneratedColumn,
   Check,
   ManyToOne,
+  ManyToMany,
 } from 'typeorm';
 
 @Entity()
@@ -21,4 +24,7 @@ export class Product {
 
   @ManyToOne(() => User, (user) => user.products)
   user: User;
+
+  @ManyToMany(() => Order, (order) => order.products)
+  orders: Order[];
 }

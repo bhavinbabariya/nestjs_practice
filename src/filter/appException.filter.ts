@@ -5,30 +5,30 @@ import {
   HttpException,
   HttpStatus,
 } from '@nestjs/common';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
+import { normalLogger, writeLog } from 'src/utils';
 
+// All remaining exception will be catched here
 @Catch()
 export class AppExceptionFilter implements ExceptionFilter {
-  catch(exception: unknown, host: ArgumentsHost) {
+  catch(exception: Error, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const res = ctx.getResponse();
 
-    console.log('inside common');
     let status = HttpStatus.INTERNAL_SERVER_ERROR;
     let msg = 'Internal Server Error';
+    let logPath = 'other';
 
-    let log = true;
+    // Handle HttpException
     if (exception instanceof HttpException) {
       status = exception.getStatus();
       msg = exception.message;
-      log = true;
 
-      // If custom validator throws error then fetch
+      // If validator throws error then catch
       const res: any = exception.getResponse();
       if ('message' in res) {
         msg = res.message;
       }
+      logPath = 'http';
     }
 
     const body = {
@@ -37,25 +37,12 @@ export class AppExceptionFilter implements ExceptionFilter {
       message: msg,
     };
 
-    if (log) this.writeHttpLog(body);
-
+    // writeLog(logPath, { exception, path: exception.stack });
+    normalLogger.error({
+      timestamp: new Date().toLocaleTimeString(),
+      exception,
+      path: exception.stack,
+    });
     res.json(body);
-  }
-
-  private async writeHttpLog(data: Record<string, any>) {
-    const LOGS_DIR = join(
-      __dirname,
-      '..',
-      '..',
-      'log',
-      'http',
-      `${Date.now()}-log.json`,
-    );
-
-    try {
-      await writeFile(LOGS_DIR, JSON.stringify(data));
-    } catch (err) {
-      return;
-    }
   }
 }

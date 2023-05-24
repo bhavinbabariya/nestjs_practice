@@ -1,5 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Product } from 'src/product/product.entity';
 import { ProductService } from 'src/product/product.service';
 import { TransactionService } from 'src/transaction/transaction.service';
 import { User } from 'src/users/users.entity';
@@ -14,6 +15,7 @@ export class OrderService {
     @InjectRepository(Order) private orderRepo: Repository<Order>,
     @InjectRepository(OrderDetails)
     private orderDetailsRepo: Repository<OrderDetails>,
+    @InjectRepository(Product)
     private productService: ProductService,
     private transactionService: TransactionService,
   ) {}
@@ -35,23 +37,36 @@ export class OrderService {
         throw new BadRequestException('product not found');
       }
 
-      const OrderDetails = cart.map((cartItem) =>
+      const orderDetails = cart.map((cartItem) =>
         this.orderDetailsRepo.create({
           orderId: placedOrder.id,
           productId: cartItem.pId,
           quantity: cartItem.quantity,
         }),
       );
+      await queryRunner.manager.save(OrderDetails, orderDetails);
 
-      this.orderDetailsRepo.save(OrderDetails);
-
+      // Transaction : COMMIT
       await this.transactionService.commitTransaction(queryRunner);
 
       return { success: true, orderId: placedOrder.id };
     } catch (error) {
+      // Transaction : ROLLBACK
       await this.transactionService.rollbackTransaction(queryRunner);
 
       throw error;
     }
+  }
+
+  async showOrder(user: User) {
+    const queryBuilder = this.orderRepo.createQueryBuilder('order');
+
+    const orders = await queryBuilder
+      .leftJoinAndSelect('order.products', 'product')
+      .leftJoin('product.user', 'user')
+      .where('user.id = :id', { id: user.id })
+      .getMany();
+
+    return orders;
   }
 }

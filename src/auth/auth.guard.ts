@@ -16,14 +16,14 @@ export class AuthGuard implements CanActivate {
 
   async canActivate(ctx: ExecutionContext): Promise<boolean> {
     const req = ctx.switchToHttp().getRequest();
-    const token = req.headers['authorization'];
+    let token: string = req.headers['authorization'];
 
-    console.log(req.headers);
     if (!token) {
       throw new UnauthorizedException();
     }
 
     try {
+      token = token.split(' ')[1];
       const payload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get('JWT.SECRET'),
       });

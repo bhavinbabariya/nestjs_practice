@@ -20,6 +20,7 @@ import { User } from './users/users.entity';
         database: configService.get('DB.NAME'),
         entities: [User, Product, Order, OrderDetails],
         synchronize: true,
+        logging: true,
       }),
       inject: [ConfigService],
     }),

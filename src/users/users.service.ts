@@ -31,16 +31,27 @@ export class UsersService {
     return this.userRepository.findOneBy({ id });
   }
 
-  findAll(role: string) {
-    const options: FindManyOptions<User> = {
-      select: ['id', 'email'],
-      where: {
-        role,
-      },
-    };
+  // findAll(role: string) {
+  //   const options: FindManyOptions<User> = {
+  //     select: ['id', 'email'],
+  //     where: {
+  //       role,
+  //     },
+  //   };
 
-    if (role === 'seller') options.relations = ['products'];
+  //   if (role === 'seller') options.relations = ['products'];
 
-    return this.userRepository.find(options);
+  //   return this.userRepository.find(options);
+  // }
+
+  async findAll(role: string) {
+    const queryBuilder = this.userRepository.createQueryBuilder('user');
+
+    console.log('here');
+    const users: User[] = await queryBuilder
+      .leftJoinAndSelect('user.orders', 'product')
+      .getMany();
+
+    return users;
   }
 }

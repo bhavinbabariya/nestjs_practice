@@ -7,7 +7,8 @@ import {
   NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
-import { TypeORMError } from 'typeorm';
+import { TypeORMError, QueryFailedError } from 'typeorm';
+import { typeOrmLogger } from './utils';
 
 @Injectable()
 export class AppService {
@@ -17,7 +18,10 @@ export class AppService {
     // } else {
     //   console.log(false);
     // }
-    // if (true) throw new BadRequestException('invalid');
+    if (true) throw new BadRequestException('Invalid');
+    // if (true) throw new QueryFailedError('select * from employee', [0], 0);
+
+    // throw new QueryFailedError('select * from undefined', [0], 0);
 
     return 'Hello World!';
   }
