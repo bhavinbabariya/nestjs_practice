@@ -6,12 +6,19 @@ import {
   ManyToMany,
   JoinTable,
   ManyToOne,
+  Column,
 } from 'typeorm';
 
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn()
   id: number;
+
+  @Column({ nullable: false, default: 'pending' })
+  status: string;
+
+  @Column({ nullable: false })
+  address: string;
 
   @ManyToOne(() => User, (user) => user.orders)
   user: User;

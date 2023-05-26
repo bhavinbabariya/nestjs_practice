@@ -4,6 +4,7 @@ import {
   IsInt,
   ValidateNested,
   ArrayNotEmpty,
+  IsString,
 } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -37,4 +38,13 @@ export class PlaceOrderDto {
   @ValidateNested({ each: true })
   @Type(() => CartItem)
   readonly cart: CartItem[];
+
+  @ApiProperty({
+    type: String,
+    description: 'address',
+    example: '6 , bansari residency, bopal, ahmedabad 326598',
+  })
+  @IsString()
+  @IsNotEmpty()
+  address: string;
 }

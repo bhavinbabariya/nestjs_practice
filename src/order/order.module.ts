@@ -11,7 +11,7 @@ import { OrderDetails } from './order_details.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Order, OrderDetails, Product]),
+    TypeOrmModule.forFeature([Order, OrderDetails]),
     AuthModule,
     UsersModule,
     ProductModule,

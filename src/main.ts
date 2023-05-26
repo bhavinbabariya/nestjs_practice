@@ -17,6 +17,7 @@ async function bootstrap() {
     }),
   );
 
+  // USE : EXCEPTION FILTER
   app.useGlobalFilters(new AppExceptionFilter());
   app.useGlobalFilters(new TypeOrmExceptionFilter());
 
@@ -33,6 +34,8 @@ async function bootstrap() {
       },
     }),
   );
+
+  // Swagger configuration
   const config = new DocumentBuilder()
     .setTitle('E-Commerce Application')
     .setDescription('created by Bhavin Babariya')
@@ -42,7 +45,7 @@ async function bootstrap() {
         description: 'This is Bearer auth',
         scheme: 'bearer',
         bearerFormat: 'Token',
-        in: 'Header',
+        in: 'Header', // Must add
       },
       'Authorization',
     )

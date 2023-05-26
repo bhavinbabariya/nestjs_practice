@@ -1,4 +1,4 @@
-import { Body, Controller, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post } from '@nestjs/common';
 import {
   ApiCreatedResponse,
   ApiTags,
@@ -30,6 +30,7 @@ export class AuthController {
   @ApiAcceptedResponse({ description: 'login successfully' })
   @ApiUnauthorizedResponse({ description: 'Unauthorized' })
   @ApiBadRequestResponse({ description: 'Bad Request' })
+  @HttpCode(200)
   @Post('/signin')
   async signIn(@Body() body: LoginUserDto) {
     return this.authService.signIn(body.email, body.password);

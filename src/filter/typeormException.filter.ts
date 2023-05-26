@@ -21,6 +21,6 @@ export class TypeOrmExceptionFilter implements ExceptionFilter {
       path: exception.stack,
     });
 
-    res.json(body);
+    res.status(500).json(body);
   }
 }

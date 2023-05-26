@@ -43,6 +43,6 @@ export class AppExceptionFilter implements ExceptionFilter {
       exception,
       path: exception.stack,
     });
-    res.json(body);
+    res.status(status).json(body);
   }
 }
